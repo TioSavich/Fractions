@@ -1,0 +1,182 @@
+/* 
+ * Modernized Fraction Bars CSS
+ * Based on original work by University of Massachusetts Dartmouth
+ * Updated for modern browsers and touch devices
+ */
+
+:root {
+  /* Color palette */
+  --primary-border: #aa3333;
+  --background-light: #EFEFEF;
+  --text-color: #222222;
+  --border-color: #aaaaaa;
+  
+  /* Spacing */
+  --spacing-sm: 0.25rem;
+  --spacing-md: 0.5rem;
+  --spacing-lg: 1rem;
+  
+  /* Touch targets */
+  --touch-target-size: 44px; /* Following WCAG touch target size recommendations */
+}
+
+/* Base styles */
+body {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  font-size: 16px;
+  line-height: 1.5;
+  color: var(--text-color);
+  touch-action: manipulation; /* Improves touch handling */
+}
+
+/* Accessibility */
+.skip-link {
+  position: absolute;
+  top: -40px;
+  left: 0;
+  background: #000;
+  color: white;
+  padding: 8px;
+  z-index: 100;
+}
+
+.skip-link:focus {
+  top: 0;
+}
+
+/* Canvas */
+#fbCanvas {
+  background-color: var(--background-light);
+  border: 1px solid var(--border-color);
+  touch-action: none; /* Prevents default touch actions for custom handling */
+  max-width: 100%;
+  height: auto;
+}
+
+/* Tools Section */
+#tools {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+  gap: var(--spacing-md);
+  padding: var(--spacing-md);
+}
+
+.toolGroup {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-sm);
+  margin-bottom: var(--spacing-md);
+}
+
+/* Tool Buttons */
+.toolGroup a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: var(--touch-target-size);
+  min-height: var(--touch-target-size);
+  padding: var(--spacing-sm) var(--spacing-md);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  background: white;
+  color: var(--text-color);
+  text-decoration: none;
+  transition: all 0.2s ease;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.toolGroup a:active {
+  transform: scale(0.98);
+}
+
+/* Color Blocks */
+.colorBlock, .colorBlock1 {
+  width: var(--touch-target-size);
+  height: var(--touch-target-size);
+  border: 2px solid var(--border-color);
+  border-radius: 4px;
+  margin: var(--spacing-sm);
+}
+
+.colorSelected {
+  border-color: black;
+  box-shadow: 0 0 0 2px rgba(0,0,0,0.2);
+}
+
+/* Modern Color Palette */
+.color1 { background-color: #A8FFF4; }
+.color2 { background-color: #DDFFF0; }
+.color3 { background-color: #ACBEFF; }
+.color4 { background-color: #707EFF; }
+.color5 { background-color: #FFFFFF; }
+.color6 { background-color: #EFEFEF; }
+.color7 { background-color: #E6E6E6; }
+.color8 { background-color: #D6D6D6; }
+.color9 { background-color: #FFCC66; }
+.color10 { background-color: #FFFF66; }
+.color11 { background-color: #E9FF66; }
+.color12 { background-color: #CCFF66; }
+.color13 { background-color: #DD99FF; }
+.color14 { background-color: #FF92DA; }
+.color15 { background-color: #F56ED0; }
+.color16 { background-color: #FF8C8C; }
+
+/* Dialog Styles */
+.ui-dialog {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  padding: var(--spacing-md);
+}
+
+.ui-dialog-titlebar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--spacing-md);
+  border-bottom: 1px solid var(--border-color);
+}
+
+/* Sliders */
+.ui-slider {
+  height: 6px;
+  background: var(--background-light);
+  border-radius: 3px;
+  margin: var(--spacing-lg) 0;
+}
+
+.ui-slider-handle {
+  width: var(--touch-target-size);
+  height: var(--touch-target-size);
+  background: white;
+  border: 2px solid var(--border-color);
+  border-radius: 50%;
+  top: -18px;
+  margin-left: calc(var(--touch-target-size) / -2);
+  touch-action: none;
+}
+
+/* Media Queries for Responsive Design */
+@media (max-width: 768px) {
+  #tools {
+    grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+  }
+  
+  .toolGroup a {
+    font-size: 14px;
+    padding: var(--spacing-sm);
+  }
+}
+
+/* Touch-specific styles */
+@media (pointer: coarse) {
+  .toolGroup a {
+    padding: var(--spacing-md);
+  }
+  
+  .ui-slider-handle {
+    width: calc(var(--touch-target-size) * 1.2);
+    height: calc(var(--touch-target-size) * 1.2);
+  }
+}

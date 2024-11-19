@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Modern Fraction Bars</title>
+  <meta name="description" content="Interactive fraction learning tool for students and teachers">
+
+  <!-- Base styles -->
+  <style>
+    :root {
+      --primary-color: #007AFF;
+      --secondary-color: #5856D6;
+      --background-color: #F2F2F7;
+      --toolbar-height: 48px;
+      --status-height: 32px;
+      --spacing: 8px;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: var(--background-color);
+      overscroll-behavior: none;
+    }
+
+    .app-container {
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      max-height: 100vh;
+    }
+
+    /* Toolbar styles */
+    .fraction-bars-toolbar {
+      height: var(--toolbar-height);
+      background: white;
+      border-bottom: 1px solid rgba(0,0,0,0.1);
+      display: flex;
+      align-items: center;
+      padding: 0 var(--spacing);
+      gap: var(--spacing);
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    }
+
+    .toolbar-button {
+      height: 36px;
+      padding: 0 12px;
+      border: none;
+      border-radius: 6px;
+      background: transparent;
+      color: #333;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: background-color 0.2s;
+    }
+
+    .toolbar-button:hover {
+      background: rgba(0,0,0,0.05);
+    }
+
+    .toolbar-button.active {
+      background: var(--primary-color);
+      color: white;
+    }
+
+    .toolbar-button span {
+      font-size: 14px;
+    }
+
+    .toolbar-separator {
+      width: 1px;
+      height: 24px;
+      background: rgba(0,0,0,0.1);
+      margin: 0 var(--spacing);
+    }
+
+    /* Main workspace */
+    .fraction-bars-workspace {
+      flex: 1;
+      position: relative;
+      overflow: hidden;
+      touch-action: none;
+      background: white;
+    }
+
+    /* Status bar */
+    .fraction-bars-status {
+      height: var(--status-height);
+      background: white;
+      border-top: 1px solid rgba(0,0,0,0.1);
+      display: flex;
+      align-items: center;
+      padding: 0 var(--spacing);
+      font-size: 12px;
+      color: #666;
+    }
+
+    .status-section {
+      margin-right: 24px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .status-label {
+      color: #999;
+    }
+
+    /* Accessibility */
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      border: 0;
+    }
+
+    /* Dialog styles */
+    .dialog-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0,0,0,0.5);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+    }
+
+    .dialog {
+      background: white;
+      border-radius: 12px;
+      padding: 24px;
+      min-width: 320px;
+      max-width: 90vw;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.12);
+    }
+
+    .dialog-header {
+      margin-bottom: 16px;
+    }
+
+    .dialog-title {
+      margin: 0;
+      font-size: 18px;
+      font-weight: 600;
+    }
+
+    .dialog-content {
+      margin-bottom: 24px;
+    }
+
+    .dialog-footer {
+      display: flex;
+      justify-content: flex-end;
+      gap: 8px;
+    }
+
+    /* Button styles */
+    .button {
+      padding: 8px 16px;
+      border: none;
+      border-radius: 6px;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .button-primary {
+      background: var(--primary-color);
+      color: white;
+    }
+
+    .button-secondary {
+      background: var(--background-color);
+      color: #333;
+    }
+
+    /* Touch feedback */
+    @media (hover: none) {
+      .toolbar-button:active {
+        background: rgba(0,0,0,0.1);
+        transform: scale(0.98);
+      }
+    }
+
+    /* High contrast mode */
+    @media (prefers-contrast: more) {
+      .toolbar-button {
+        border: 1px solid currentColor;
+      }
+    }
+
+    /* Reduced motion */
+    @media (prefers-reduced-motion: reduce) {
+      * {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app-container">
+    <!-- Skip link for accessibility -->
+    <a href="#fraction-bars-workspace" class="sr-only">Skip to fraction bars workspace</a>
+
+    <!-- Main app container -->
+    <div id="fraction-bars-container" class="fraction-bars-app">
+      <div class="fraction-bars-toolbar" role="toolbar" aria-label="Fraction bars tools">
+        <!-- Toolbar buttons will be injected by JavaScript -->
+      </div>
+
+      <div id="fraction-bars-workspace" class="fraction-bars-workspace" 
+           role="application" 
+           aria-label="Fraction bars workspace"
+           tabindex="0">
+        <!-- SVG workspace will be injected here -->
+      </div>
+
+      <div class="fraction-bars-status" role="status" aria-live="polite">
+        <!-- Status sections will be injected by JavaScript -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Templates -->
+  <template id="dialog-template">
+    <div class="dialog-overlay" role="dialog">
+      <div class="dialog">
+        <div class="dialog-header">
+          <h2 class="dialog-title"></h2>
+        </div>
+        <div class="dialog-content"></div>
+        <div class="dialog-footer">
+          <button class="button button-secondary" data-action="cancel">Cancel</button>
+          <button class="button button-primary" data-action="confirm">OK</button>
+        </div>
+      </div>
+    </div>
+  </template>
+
+  <!-- Scripts -->
+	<script type="module" src="/src/index.ts"></script>
+  <!-- Load modern bundled version of our application -->
+ 
+  <!-- Error handling -->
+  <script>
+    window.addEventListener('error', (e) => {
+      console.error('Application error:', e.error);
+      // You could show a user-friendly error message here
+    });
+  </script>
+
+  <!-- Initialize service worker for offline support -->
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('/sw.js').catch(console.error);
+    }
+  </script>
+</body>
+</html>
